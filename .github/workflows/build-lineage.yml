@@ -1,0 +1,29 @@
+name: Local LineageOS Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Setup build environment
+        run: |
+          cd /home/lyco/android/sp
+          . build/envsetup.sh
+          lunch lineage_sapphire-bp1a-user
+
+      - name: Compile ROM
+        run: |
+          mka bacon
+
+      - name: Upload to PixelDrain
+        env:
+          PIXELDRAIN_API_KEY: ${{ secrets.PIXELDRAIN_API_KEY }}
+        run: |
+          cd /mnt/android-out/pixel/target/product/sapphire
+          ZIP=$(ls /mnt/android-out/pixel/target/product/sapphire/lineage-*-BASEROM-sapphire.zip)
+          curl -X PUT -u :$PIXELDRAIN_API_KEY \
+               https://pixeldrain.com/api/file/ -T "$ZIP"
+
