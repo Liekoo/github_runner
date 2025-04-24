@@ -11,6 +11,7 @@ jobs:
       - name: Setup build environment
         run: |
           cd /home/lyco/android/sp
+          export ALLOW_MISSING_DEPENDENCIES=true
           . build/envsetup.sh
           lunch lineage_sapphire-bp1a-user
 
