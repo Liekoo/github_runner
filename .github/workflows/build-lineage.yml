@@ -17,7 +17,7 @@ jobs:
 
       - name: Compile ROM
         run: |
-          mka bacon
+          m bacon -j3
 
       - name: Upload to PixelDrain
         env:
